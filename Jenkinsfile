@@ -13,15 +13,19 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    bat 'docker build -t %DOCKERHUB_REPO%:latest .'
+                    bat """
+                    docker build -t ${DOCKERHUB_REPO}:latest .
+                    """
                 }
             }
         }
         stage('Push to DockerHub') {
             steps {
                 script {
-                    bat "echo %DOCKERHUB_CREDENTIALS_PSW% | docker login -u %DOCKERHUB_CREDENTIALS_USR% --password-stdin"
-                    bat 'docker push %DOCKERHUB_REPO%:latest'
+                    bat """
+                    echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin
+                    docker push ${DOCKERHUB_REPO}:latest
+                    """
                 }
             }
         }
